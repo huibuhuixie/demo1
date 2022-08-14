@@ -1,0 +1,119 @@
+#力扣刷题
+#数组的动态和
+class Solution:
+    def runningSum(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        res = [0]
+        res[0] = nums[0]
+        for i in range(1,n):
+            res.append(res[i - 1] + nums[i])
+        return res
+#检查r是否由m中字符组成 m中每个字符只能用一次
+class Solution: 
+    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
+        r = list(ransomNote)
+        m = list(magazine)
+        n = len(r)
+        count = 0
+        for i in range(len(r)):
+            a = r.pop(0)
+            for j in range(len(m)):
+                if a == m[j]:
+                    m.pop(j)
+                    count += 1
+                    break
+        if count == n:
+            return True
+        else:
+            return False
+#检查r是否由m中字符组成 m中每个字符只能用一次。改进版
+import collections
+
+class Solution:
+    def canConstruct(self, ransomNote, magazine):
+        temp = dict(collections.Counter(ransomNote).items())        #分别对ransomeNote和magazine进行计数，并转化为字典 collections库中的Counter方法可直接返回统计过后的字典
+        temp2 = dict(collections.Counter(magazine).items())
+        for index in temp.keys():       #对ransomeNote字典的键进行遍历
+            if index not in temp2.keys():   #如果键只存在于ransomeNote字典，直接返回False
+                return False
+            if temp.get(index) > temp2.get(index):      #如果ransomeNote字典键的值大于magazine的值，也就是出现次数大于magazine，返回False
+                return False
+        return True
+#fizzbuzz
+class Solution:
+    def fizzBuzz(self, n: int) -> List[str]:
+        answer = []
+        for i in range(1,n+1):
+            if i % 3 == 0 and i % 5 == 0:
+                answer.append("FizzBuzz")
+            elif i % 3 == 0:
+                answer.append("Fizz")
+            elif i % 5 == 0:
+                answer.append("Buzz")
+            else:
+                answer.append("%d" % i)
+        return answer
+#返回链表中间值
+class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        A = [head]
+        while A[-1].next:
+            A.append(A[-1].next)
+        return A[len(A) // 2]
+#归零步数
+class Solution:
+    def numberOfSteps(self, num: int) -> int:
+        count = 0
+        while num != 0:
+            if num % 2 == 0:
+                num /= 2
+                count += 1
+            else:
+                num -= 1
+                count += 1
+        return count
+#给你一个 m x n 的整数网格 accounts ，其中 accounts[i][j] 是第 i 位客户在第 j 家银行托管的资产数量。返回最富有客户所拥有的 资产总量 。
+
+客户的 资产总量 就是他们在各家银行托管的资产数量之和。最富有客户就是 资产总量 最大的客户。
+class Solution:
+    def maximumWealth(self, accounts: List[List[int]]) -> int:
+        res = []
+        for i in range(len(accounts)):
+            a = 0
+            for j in range(len(accounts[i])):
+                a += accounts[i][j]
+            res.append(a)
+        return max(res)
+#上个问题改进 map函数 map（），map() 会根据提供的函数对指定序列做映射。
+
+第一个参数 function 以参数序列中的每一个元素调用 function 函数，返回包含每次 function 函数返回值的新列表。
+class Solution:
+    def maximumWealth(self, accounts: List[List[int]]) -> int:
+    return max(map(sum,accounts))
+#给你一个 二叉树 的根结点 root，该二叉树由恰好 3 个结点组成：根结点、左子结点和右子结点。
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def checkTree(self, root: Optional[TreeNode]) -> bool:
+        if root.val == root.right.val + root.left.val:
+            return True
+        else:
+            return False
+#不改变数组长度 ，顺序 ，空间复杂度0（1）的删除重复元素
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+        
+        n = len(nums)
+        fast = slow = 1
+        while fast < n:
+            if nums[fast] != nums[fast - 1]:
+                nums[slow] = nums[fast]
+                slow += 1
+            fast += 1
+        return slow
