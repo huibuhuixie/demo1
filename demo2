@@ -1,0 +1,314 @@
+#1 单链表 执行添加，头部添加，尾部添加， 删除 查找操作
+class Node():
+    def __init__(self,val):
+        self.val = val
+        self.next = None
+
+class MyLinkedList(object):
+    def __init__(self):
+        self.head = None
+
+    def get(self, index):
+        if index <= 0 or self.head == None:
+            return -1
+        else:
+            count = 0
+            cur = self.head
+            while cur.next != None:
+                count += 1
+                cur = cur.next
+            if index > count:
+                return -1
+        if 0 < index <= count:
+            count = 0
+            cur = self.head
+            while count != index:
+                count += 1
+                cur = cur.next
+            return cur.val
+
+
+
+    def addAtHead(self, val):
+        """
+        :type val: int
+        :rtype: None
+        """
+        if self.head == None:
+            node = Node(val)
+            self.head = node
+        else:
+            node = Node(val)
+            node.next = self.head.next
+            self.head = node
+
+
+    def addAtTail(self, val):
+        """
+        :type val: int
+        :rtype: None
+        """
+        if self.head == None:
+            addAtHead(val)
+        else:
+            node = Node(val)
+            cur = self.head
+            while cur.next != None:
+                cur = cur.next
+            cur.next = node
+            
+
+
+
+
+    def addAtIndex(self, index, val):
+        """
+        :type index: int
+        :type val: int
+        :rtype: None
+        """
+        if self.head == None:
+            return
+        else:
+            count = 0
+            cur = self.head
+            while cur.next != None:
+                count += 1
+                cur = cur.next
+        if index < 0 :
+            addAtHead(val)
+        elif index > count:
+            return
+        elif index == count:
+            addAtTail(val)
+        else:
+            node = Node(val)
+            cur = self.head
+            while cur.next.val != val:
+                cur = cur.next
+            node.next = cur.next
+            cur.next = node           
+
+    def deleteAtIndex(self, index):
+        """
+        :type index: int
+        :rtype: None
+        """
+        if self.head == None:
+            return False
+        else:
+            count = 0
+            cur = self.head
+            while cur.next != None:
+                count += 1
+                cur = cur.next
+        if 0 < index <= count:
+            number = 0
+            cur = self.head
+            while number != index - 1:
+                cur = cur.next
+                number += 1
+            cur.next = cur.next.next
+        else:
+            return False
+# 2 快慢指针验证链表是否成环
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def hasCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        if head == None:
+            return False
+        fast = head
+        slow = head
+        while fast.next != None and fast.next.next != None:
+            fast = fast.next.next
+            slow = slow.next
+            if slow == fast:
+                return True
+        return False
+# 3 返回环的进入节点
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def detectCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head == None:
+            return None
+        fast = head
+        slow = head
+        while fast != None and fast.next != None:
+            fast = fast.next.next
+            slow = slow.next
+            if slow == fast:
+                break
+        if fast == None or fast.next == None:
+            return None
+        fast = head
+        if fast == slow and slow.next != None:
+            return fast
+        else:
+            while slow.next != None:
+                fast = fast.next
+                slow = slow.next
+                if fast == slow :
+                    return fast
+        return None
+# 4 找出相交链表的第一个相交节点  双指针循环 要是相交 则一定会在第一个节点相遇 如果不相交 则总会同时等于none
+class Solution(object):
+    def getIntersectionNode(self, headA, headB):
+        """
+        :type head1, head1: ListNode
+        :rtype: ListNode
+        """
+        if headA == None or headB == None:
+            return None
+        a,b = headA,headB
+        while a!=b:
+            a,b = a.next,b.next
+            if a == None and b == None:
+                return None
+            if a == None:
+                a = headB
+            if b == None:
+                b = headA
+        return a
+        解法二：
+        可以将问题四看作问题三的进阶 将a的头和b的尾连接起来，当作寻找循环起点的解法，再针对情况稍作修改
+#5 删除链表倒数第n个节点
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def removeNthFromEnd(self, head, n):
+        """
+        :type head: ListNode
+        :type n: int
+        :rtype: ListNode
+        """
+        cur = head
+        count = 1
+        while cur.next != None:
+            cur = cur.next
+            count += 1
+        if count == n:
+            head = head.next
+        else:
+            cur = head
+            for i in range(count - n - 1):
+                cur = cur.next
+            cur.next = cur.next.next
+        return head
+        #6反转链表 利用栈
+        # Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def reverseList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head == None or head.next == None:
+            return head
+        res = []
+        while head.next != None:
+            res.append(head)
+        res.append(head)
+        newhaed = res.pop()
+        cur = newhead
+        while res:
+            node = res.pop()
+            newhaed = node
+            newhaed = newhaed.next
+        newhaed.next = None
+        return cur
+        #反转列表 局部反转 双指针
+        class Solution(object):
+    def reverseList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head == None or head.next == None:
+            return head
+        pre = None
+        cur = head
+        while cur != None:  #画图看更容易理解
+            t = cur.next
+            cur.next = pre
+            pre = cur
+            cur = t
+        return pre
+#7删除链表中所有同一元素
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def removeElements(self, head, val):
+        """
+        :type head: ListNode
+        :type val: int
+        :rtype: ListNode
+        """
+        if head == None:
+            return head
+        while head != None and head.val == val:
+            head = head.next
+        if head == None:
+            return head
+        cur = head
+        while cur.next != None:
+            if cur.next.val == val:
+                cur.next = cur.next.next
+                continue
+            cur = cur.next
+        if cur.val == val:
+            cur = None
+        return head
+#8 奇偶链表
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def oddEvenList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head == None or head.next == None or head.next.next == None:
+            return head
+        ji = head
+        ou = head.next
+        ji_n = ji
+        ou_n = ou
+        while ji.next.next != None:
+            ji_n.next = ji.next.next
+            ji = ji.next.next       
+        while ou.next.next != None:
+            ou_n.next = ou.next.next
+            ou = ou.next.next
+        ji_n.next = ou_n
+        return ji_n
