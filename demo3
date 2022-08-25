@@ -1,0 +1,219 @@
+#1奇偶链表 比较慢的方法 奇偶分组 然后串起来
+class Solution(object):
+    def oddEvenList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head == None or head.next == None or head.next.next == None:
+            return head
+        count = 1
+        cur = head
+        while cur.next != None:
+            cur = cur.next
+            count += 1
+        if count % 2 == 0:
+            ji = head
+            ou = head.next
+            ji_n = ji
+            ou_n = ou
+            while ji.next.next != None:
+                ji_n.next = ji.next.next
+                ji = ji.next.next       
+            while ou.next != None:
+                ou_n.next = ou.next.next
+                ou = ou.next.next
+            ji_n.next = ou_n
+            return ji_n
+        else:
+            ji = head
+            ou = head.next
+            ji_n = ji
+            ou_n = ou
+            while ji.next != None:
+                ji_n.next = ji.next.next
+                ji = ji.next.next       
+            while ou.next.next != None:
+                ou_n.next = ou.next.next
+                ou = ou.next.next
+                ji_n.next = ou_n
+            return ji_n
+ #比较快的奇偶链表 快慢指针局部互换
+ # Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def oddEvenList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head == None or head.next == None or head.next.next == None:
+            return head
+        slow = head 
+        fast = head.next
+        while fast != None and fast.next != None: #要再创建一个指引当作中介 满足互换
+            target = fast.next
+            fast.next = fast.next.next
+            fast = fast.next
+            target.next = slow.next
+            slow.next = target
+            slow = slow.next
+        return head
+#2判断链表是否回文 （重点是如何从后往前遍历链表）
+  #从后往前遍历列表的两种方法
+    #1反转链表
+      #快慢指针找到链表中间点 如果为偶数，则慢指针在后一个节点;如果奇数，则slow在中间节点的后一个节点，反转后面的链表
+          while fast != None and fast.next != None:
+            fast = fast.next.next
+            slow = slow.next
+          if fast != None:
+              slow = slow.next
+          slow = resever(slow)
+          while slow != None:
+              if slow.val != head.val:
+                  return False
+              slow = slow.next
+              head = head.next
+      #此时slow已经到了需要反转的链表的头下面是反转操作
+      def resever(self,head):
+          if head == None or head.next == None:
+              return head
+          pre = None
+          while head != None:
+              next = head.next
+              head.next = pre
+              pre = head
+              head = next
+            return pre
+      #2栈的先入后出特点来从后往前遍历链表
+        res = []
+        fast = head.next
+        slow = head
+        while fast != None and fast.next != None:
+            fast = fast.next.next
+            slow = slow.next
+        if fast != None:
+              slow = slow.next
+        while slow.next != None:
+            res.append(slow.val)
+            slow = slow.next
+        while res:
+            if head.val != res.pop(-1):
+            return False
+            haed = head.next
+        return True
+#3双链表
+class MyLinkedList(object):
+
+    def __init__(self):
+        self.head = None
+
+
+    def get(self, index):
+        """
+        Get the value of the index-th node in the linked list. If the index is invalid, return -1.
+        :type index: int
+        :rtype: int
+        """
+        if(index<0 or self.head ==None):
+            return -1
+        else:
+            count = 0  #current node index, start from 0
+            cur = self.head  #current node
+            while(count<index and cur.next != None):  #find the (index-1)th node
+                count = count+1
+                cur=cur.next
+            if(count == index):
+                return cur.val
+            else:
+                return -1
+
+    def addAtHead(self, val):
+        """
+        Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
+        :type val: int
+        :rtype: None
+        """
+        node = Node(val)
+        node.next = self.head
+        node.prev = None
+        self.head = node
+
+    def addAtTail(self, val):
+        """
+        Append a node of value val to the last element of the linked list.
+        :type val: int
+        :rtype: None
+        """
+        node = Node(val)
+        if(self.head==None):    #incase of empty chain
+            self.head = node
+        else:
+            cur = self.head
+            while (cur.next != None):
+                cur = cur.next
+            cur.next = node
+            node.prev = cur
+
+    def addAtIndex(self, index, val):
+        """
+        Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted.
+        :type index: int
+        :type val: int
+        :rtype: None
+        """
+        if(index<=0):
+            self.addAtHead(val=val)
+        elif(self.head!=None):
+            count = 0  #current node index, start from 0
+            cur = self.head  #current node
+            while(count<index-1 and cur.next != None):  #find the (index-1)th node
+                count = count+1
+                cur=cur.next
+            if(count == index-1):
+                node = Node(val)
+                node.next = cur.next
+                node.prev = cur
+                if(cur.next!=None):
+                    cur.next.prev = node
+                cur.next = node
+
+
+
+    def deleteAtIndex(self, index):
+        """
+        Delete the index-th node in the linked list, if the index is valid.
+        :type index: int
+        :rtype: None
+        """
+        if(self.head!=None):
+            if(index == 0):
+                temp = self.head
+                self.head = temp.next
+                if(self.head!=None):
+                    self.head.prev = None
+                # del temp
+                # gc.collect()                 #detele virable and free memory
+            elif (index > 0):
+                count = 0  # current node index, start from 0
+                cur = self.head  # current node
+                while (count < index-1 and cur.next != None):  # find the (index-1)th node
+                    count = count + 1
+                    cur = cur.next
+                if (count == index-1):
+                    temp = cur.next
+                    if(temp!=None):    #there is no the (index)th node
+                        cur.next = temp.next
+                        if(cur.next!=None):
+                            cur.next.prev = cur
+
+class Node(object):
+    def __init__(self, val):
+        self.val = val
+        self.next = None
+        self.prev = None
+        
+    
