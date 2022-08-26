@@ -215,5 +215,120 @@ class Node(object):
         self.val = val
         self.next = None
         self.prev = None
+#4 合并两个有序列表   思路简洁 创建一个新的节点，比较两个有序链表的值按从小到大排到新节点后面，然后迭代链表，因为两个列表都是有序的，当一个链表走到尾，即表示另一个链表剩下的节点的值都
+大于新节点的值，直接挂在新节点后面即可
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def mergeTwoLists(self, list1, list2):
+        """
+        :type list1: Optional[ListNode]
+        :type list2: Optional[ListNode]
+        :rtype: Optional[ListNode]
+        """
+        pre = ListNode()
+        cur = pre
+        target = None
+        while list1 != None and list2 != None:
+            if list1.val < list2.val :
+                target = list1
+                list1 = list1.next
+            else:
+                target = list2
+                list2 = list2.next
+            cur.next = target
+            cur = cur.next
+        if list1 == None:
+            cur.next = list2
+        else:
+            cur.next = list1
+        return pre.next
+#5两数之和 
+    #慢算法
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        l_l1 = 1
+        l_l2 = 1
+        num_l1 = 0
+        num_l2 = 0
+        cur1 = l1
+        cur2 = l2
+        while cur1.next != None:
+            l_l1 += 1
+        while cur2.next != None:
+            l_l2 += 1
+        cur1 = l1
+        cur2 = l2
+        n = 0
+        m = 0
+        while n != l_l1 - 1:
+            num_l1 += cur1.val * 10**(n)
+            n += 1
+            cur1 = cur1.next
+        while m != l_l2 - 1:
+            num_l2 += cur2.val * 10**(m)
+            m += 1
+            cur2 = cur2.next
+        num = num_l1 + num_l2
+        l3 = ListNode()
+        cur3 = l3
+        while num > 0:
+            a = num % 10
+            num //= 10
+            cur3.next = ListNode(a)
+        return l3.next
+    #快算法 直接各位数字相加 然后进位
+    # Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        head = node = ListNode()
+        prev = 0
+        while l1 and l2:
+            _sum = l1.val + l2.val + prev
+            if _sum < 10:
+                node.next = ListNode(_sum)
+                prev = 0
+            else:
+                node.next = ListNode(_sum - 10)
+                prev = 1
+            node = node.next
+            l1, l2 = l1.next, l2.next
         
+        tail = l1 if l2 is None else l2
+        while tail:
+            _sum = tail.val + prev
+            if _sum < 10:
+                node.next = ListNode(_sum)
+                prev = 0
+            else:
+                node.next = ListNode(0)
+                prev = 1
+            node = node.next
+            tail = tail.next
+        
+        node.next = ListNode(prev) if prev else None
+        return head.next
+
     
