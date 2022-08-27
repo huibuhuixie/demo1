@@ -330,5 +330,41 @@ class Solution(object):
         
         node.next = ListNode(prev) if prev else None
         return head.next
+#6 扁平化管理连边 目前有bug 三个节点 依次为子节点时出现bug
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val, prev, next, child):
+        self.val = val
+        self.prev = prev
+        self.next = next
+        self.child = child
+"""
 
+class Solution(object):
+    def flatten(self, head):
+        """
+        :type head: Node
+        :rtype: Node
+        """
+        cur = head
+        while cur:
+            if cur.child:
+                rear = self.flatten(cur.child)
+                while rear.next:
+                    rear = rear.next
+                if cur and cur.next:
+                    if cur.next == None: #尝试改bug 可惜失败
+                        cur.next = rear
+                        rear.prev = cur
+                        rear.next = None
+                    else:
+                        target = cur.next
+                        cur.next.prev = rear
+                        cur.next = cur.child
+                        cur.child.prev = cur
+                        rear.next = target
+                        cur.child = None
+            cur = cur.next
+        return head
     
