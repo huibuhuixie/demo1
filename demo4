@@ -40,3 +40,38 @@ class Solution(object):
             cur = cur.next
             cur1 = cur1.next
         return newhead.next
+# 2 旋转列表 先成环再循环新新头节点即可 较快
+class Solution(object):
+    def rotateRight(self, head, k):
+        """
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """
+        n = 0 
+        cur = head
+        while cur != None:
+            cur = cur.next
+            n += 1
+        if n < 2:
+            return head
+        else:
+            k = k % n 
+            m = n - k
+            l = m - 1
+            if k == 0:
+                return head
+            cur = head
+            while cur.next != None:
+                cur = cur.next
+            cur.next = head
+            newhead = head
+            temp = head
+            while m > 0:
+                newhead = newhead.next
+                m -= 1
+            while l > 0:
+                temp = temp.next
+                l -= 1
+            temp.next = None
+            return newhead
