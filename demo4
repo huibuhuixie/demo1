@@ -75,3 +75,4 @@ class Solution(object):
                 l -= 1
             temp.next = None
             return newhead
+# eval（）执行字符串里面的表达式
