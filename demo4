@@ -76,3 +76,149 @@ class Solution(object):
             temp.next = None
             return newhead
 # eval（）执行字符串里面的表达式
+# 3 链表部分的基础学习完成 下面是树部分的基础练习 如何先序遍历
+    #做法一 递归 最简单的做法
+    # Definition for a binary tree node.
+    # class TreeNode(object):
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    class Solution(object):
+        def preorderTraversal(self, root):
+            """
+            :type root: TreeNode
+            :rtype: List[int]
+            """
+            res = []
+            def preorder(root):
+                if root == None:
+                    return
+                res.append(root.val)
+                preorder(root.left) 
+                preorder(root.right)
+            preorder(root)
+            return res
+    #做法二 迭代 遍历树的时候和栈先入后出十分吻合
+    # Definition for a binary tree node.
+    # class TreeNode(object):
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        res = []
+        stack = []
+        node = root
+        while stack or node:
+            while node:
+                res.append(node.val)
+                stack.append(node)
+                node = node.left
+            node = stack.pop() 
+            node = node.right
+        return res
+#4二叉树的中序遍历
+    #递归 
+    # Definition for a binary tree node.
+    # class TreeNode(object):
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    class Solution(object):
+        def inorderTraversal(self, root):
+            """
+            :type root: TreeNode
+            :rtype: List[int]
+            """
+            res = []
+            def inorder(root):
+                if root == None:
+                    return
+                inorder(root.left)
+                res.append(root.val)
+                inorder(root.right)
+            inorder(root)
+            return res
+    #迭代
+    # Definition for a binary tree node.
+    # class TreeNode(object):
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    class Solution(object):
+        def inorderTraversal(self, root):
+            """
+            :type root: TreeNode
+            :rtype: List[int]
+            """
+            res = []
+            stack = []
+            node = root
+            while stack or node:  #多看这里的思路 很清晰
+                while node:
+                    stack.append(node)
+                    node = node.left
+                node = stack.pop()
+                res.append(node.val)
+                node = node.right
+            return res
+#5二叉树的后序遍历
+    #递归
+    # Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def postorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        res = []
+        def postorder(root):
+            if root == None:
+                return
+            postorder(root.left)
+            postorder(root.right)
+            res.append(root.val)
+        postorder(root)
+        return res
+    #迭代
+    # Definition for a binary tree .
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def postorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if root == None:
+            return
+        res = []
+        stack = [root]
+        node = root
+        while stack:
+            node = stack.pop(0)
+            res.insert(0,node.val)
+            if node.left:
+                stack.insert(0,node.left)
+            if node.right:
+                stack.insert(0,node.right)
+        return res
+
+    
+    
