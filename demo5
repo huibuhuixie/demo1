@@ -1,0 +1,173 @@
+#1 树的遍历 递归是解决树问题的很好办法
+    # Definition for a binary tree node.
+    # class TreeNode(object):
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    class Solution(object):
+        def maxDepth(self, root):
+            """
+            :type root: TreeNode
+           :rtype: int
+           """
+            if root == None:
+               return 0
+            left_depth = self.maxDepth(root.left)
+            right_depth = self.maxDepth(root.right)
+            return max(left_depth,right_depth) + 1
+#2 判断二叉树是否是对称的
+  #1迭代
+  # Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if root == None:
+            return True
+        stack_left = [root.left]
+        stack_right = [root.right]
+        right_list = []
+        left_list = []
+        while stack_left:
+            temp = stack_left.pop(0)
+            if temp:
+                left_list.append(temp.val)
+                stack_left.append(temp.left)
+                stack_left.append(temp.right)
+            else:
+                left_list.append(None)
+        while stack_right:
+            temp = stack_right.pop(0)
+            if temp:
+                right_list.append(temp.val)
+                stack_right.append(temp.right)
+                stack_right.append(temp.left)
+            else:
+                right_list.append(None)
+        if left_list == right_list:
+            return True
+        else:
+            return False
+  #2递归 递归总体来说比较慢 但是思路简单 但是相比上面的来说，思路还是较为复杂
+  # Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root: return True
+        def judge(left, right):
+            if left is None and right is None:
+                return True
+            elif left and right and left.val == right.val:
+                return judge(left.left, right.right) and judge(left.right, right.left)
+            return False
+        return judge(root, root)
+#3判断二叉树中是否有路径加权为n的路径
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def hasPathSum(self, root, targetSum):
+        """
+        :type root: TreeNode
+        :type targetSum: int
+        :rtype: bool
+        """
+        if root == None:
+            return False
+        if not root.left and not root.right:
+            return root.val == targetSum
+        return self.hasPathSum(root.left,targetSum - root.val) or self.hasPathSum(root.right,targetSum-root.val) #注意这里返回左或右 充分处理了每一种结果
+#4 从后序遍历和中序遍历中 还原出树
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def buildTree(self, inorder, postorder):
+        """
+        :type inorder: List[int]
+        :type postorder: List[int]
+        :rtype: TreeNode
+        """
+        if inorder:
+            item = postorder.pop() #按照后续遍历的特点，最后一个是根，倒是第二个是右子树的根，倒数第三个是左子树的跟
+            node = TreeNode(val=item)
+            idx = inorder.index(item)
+            node.right = self.buildTree(inorder[idx+1:], postorder)
+            node.left = self.buildTree(inorder[:idx], postorder)
+            return node
+        else:
+            return None
+# 5 从中序遍历 和 前序遍历 还原树 方法和3相同 只需要改变一下顺序
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def buildTree(self, preorder, inorder):
+        """
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        if inorder:
+            item = preorder.pop(0)
+            node = TreeNode(val = item)
+            idx = inorder.index(item)
+            node.left = self.buildTree(inorder[:idx],preorder)
+            node.right = self.buildTree(inorder[idx+1:],preorder)
+            return node
+        else:
+            return None
+#6 填充完美二叉树的每个节点的next（指向同层右边节点，没有就是None）
+  """
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val=0, left=None, right=None, next=None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
+
+class Solution(object):
+    def connect(self, root):
+        """
+        :type root: Node
+        :rtype: Node
+        """
+        def abc(left,right):
+            if left == None or left.next == right:
+                return
+            left.next = right
+            abc(left.left,left.right)
+            abc(left.right,right.left)
+            abc(right.left,right.right)
+        if root == None:
+            return
+        root.next = None
+        abc(root.left,root.right)
+        return root
