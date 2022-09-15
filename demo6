@@ -1,0 +1,27 @@
+#1 给任意二叉树的右节点添加next值
+import numpy as np
+class Solution(object):
+    def connect(self, root):
+        """
+        :type root: Node
+        :rtype: Node
+        """
+        if root == None:
+            return root
+        a = []
+        a.append(root)
+        while a:
+            temp = []
+            size = np.size(a)
+            for i in range(size):
+                cur = a.pop(0)
+                temp.append(cur)
+                if cur.left:
+                    a.append(cur.left)
+                if cur.right:
+                    a.append(cur.right)
+            b = len(temp)
+            for i in range(b - 1):
+                b[i].next = b[i + 1]
+            temp[b - 1].next = None
+        return root
