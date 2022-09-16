@@ -25,3 +25,32 @@ class Solution(object):
                 b[i].next = b[i + 1]
             temp[b - 1].next = None
         return root
+#2 寻找节点的最近公共祖先 无法想象这么巧妙的方法。或许有迹可循
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        if (root == None or root == p or root == q):
+            return root
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        #如果left为空，说明这两个节点在cur结点的右子树上，我们只需要返回右子树查找的结果即可
+        if (left == None):
+            return right
+        #同上
+        if (right == None):
+            return left
+        #如果left和right都不为空，说明这两个节点一个在cur的左子树上一个在cur的右子树上，
+        #我们只需要返回cur结点即可。
+        return root
