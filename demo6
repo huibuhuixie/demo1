@@ -54,3 +54,163 @@ class Solution(object):
         #如果left和right都不为空，说明这两个节点一个在cur的左子树上一个在cur的右子树上，
         #我们只需要返回cur结点即可。
         return root
+#3 二叉树的序列化和反序列化
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Codec:
+
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+        
+        :type root: TreeNode
+        :rtype: str
+        """
+        if root == None:
+            return root
+        index = 0
+        stack = [root]
+        while index < len(stack):
+            if stack[index] != None:
+                stack.append[stack[index].left]
+                stack.append[stack[index].right]
+                index += 1
+        while stack[-1] == None:
+            stack.pop[-1]
+        return "{%s}"%",".join([str(node.val) if node != None else "#" for node in stack])
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+        
+        :type data: str
+        :rtype: TreeNode
+        """
+        if data == []:
+            return data
+        val = data[1:-1].spilt(",")
+        root = Treenode(int(val[0]))
+        index = 0
+        queue = [root]
+        is_left = True
+        for val in val[1:]:
+            if val != "#":
+                node = TreeNode(int(val))
+                if is_left:                    
+                    queue[index].left = node
+                if not is_left:
+                    queue[index].right = node
+                queue.append(node)
+            if not is_left:
+                index += 1
+            is_left = not is_left
+        return root
+#4 二叉树课程的习题告一段落，接下来主要练习排序算法的题目 二分查找 双指针版本的二分查找
+    class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        if nums:
+            n = len(nums)
+            left = 0 
+            right = n -1
+            while left <= right:
+                mid = left +(right- left) / 2
+                if nums[mid] == target:
+                    return mid
+                elif nums[mid] < target:
+                     left = mid + 1
+                else:
+                    right = mid - 1
+            return -1 
+        else:
+            return -1
+    #方法二 递归 但是能确定列表中有这个值，不能返回具体下标。
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        if nums:
+            n = len(nums)
+            if n > 0:
+                mid = n // 2
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] < target:
+                return self.search(nums[mid:],target)
+            else:
+                return self.search(nums[:mid],target)
+            return -1 
+        else:
+            return -1
+#5 猜数字大小（二分查找）
+    class Solution(object):
+    def guessNumber(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        left = 1
+        right = n
+        while left <= right:
+            mid = left + (right - left) / 2
+            if guess(mid) == -1:
+                right = mid - 1
+            elif guess(mid) == 1:
+                left = mid + 1
+            else:
+                return mid
+        return left
+# 6 计算一个数字的算术平方根 不使用任何内置函数
+class Solution(object):
+    def mySqrt(self, x):
+        """
+        :type x: int
+        :rtype: int
+        """
+        low=1
+        high = x
+        while(low+1<high):
+            mid=low+(high-low)//2
+            if(mid*mid<=x):
+                low = mid
+            else:
+                high = mid
+        if (high*high<=x):
+            return high
+        else:
+            return low
+# 7 搜索旋转数组
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        left = 0
+        right = len(nums) - 1
+        while left <= right:
+            mid = left + (right - left)/ 2
+            if nums[mid] == target:
+                return mid
+            if nums[mid] > nums[right]:
+                if nums[mid]>target and target>=nums[left]:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            else:
+                if nums[mid]<target and target<=nums[right]:
+                    left = mid + 1
+                else:
+                    right = mid - 1
+        return -1
