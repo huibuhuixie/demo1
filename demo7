@@ -1,0 +1,18 @@
+#1 把数组排成最小的数字
+  class Solution(object):
+    def minNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: str
+        """
+        n = len(nums)
+        swap = True
+        for i in range(n - 1):
+            if swap == False:
+                break
+            swap = False
+            for j in range(n - 1 - i):
+                if int(str(nums[j]) + str(nums[j + 1])) > int(str(nums[j + 1]) + str(nums[j])):
+                    nums[j],nums[j + 1] = nums[j + 1],nums[j] 
+                    swap = True
+        return "".join(str(i) for i in nums)
