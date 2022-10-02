@@ -1,0 +1,120 @@
+#1 把数组排成最小的数
+class Solution(object):
+    def minNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: str
+        """
+        n = len(nums)
+        swap = True
+        for i in range(n - 1):
+            if swap == False:
+                break
+            swap = False
+            for j in range(n - 1 - i):
+                if int(str(nums[j]) + str(nums[j + 1])) > int(str(nums[j + 1]) + str(nums[j])):
+                    nums[j],nums[j + 1] = nums[j + 1],nums[j] 
+                    swap = True
+        return "".join(str(i) for i in nums)
+#2移动0
+class Solution(object):
+    def moveZeroes(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: None Do not return anything, modify nums in-place instead.
+        """
+        zero_number = 0
+        n = len(nums)
+        i = 0
+        while i < n - zero_number:
+            if nums[i] == 0:
+                for j in range(i , n - 1 - zero_number):
+                    nums[j],nums[j + 1] = nums[j + 1],nums[j]
+                zero_number += 1
+                i -= 1
+            i +=1
+        return nums
+#3数组第K个最大元素
+class Solution(object):
+    def findKthLargest(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        """n = len(nums)
+        for i in range(k):
+            index_max = i
+            for j in range(i + 1,n):
+                if nums[j] >= nums[index_max]:
+                    index_max = j
+            nums[i],nums[index_max] = nums[index_max],nums[i]
+        return nums[k - 1]"""
+        nums.sort()
+        return nums[- k]
+#4排序数组 选择排序
+class Solution(object):
+    def sortArray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        """n = len(nums)
+        for i in range(n - 1):
+            min1 = i
+            for j in range(i + 1, n):
+                if nums[j] <= nums[min1]:
+                    min1 = j
+            nums[min1],nums[i] = nums[i],nums[min1]
+        return nums"""
+        nums.sort()
+        return nums
+#5排序数组 插入排序
+class Solution(object):
+    def sortArray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        """n = len(nums)
+        for i in range(1,n):
+            j = i - 1
+            number = nums[i]
+            while j >= 0 and number < nums[j]:
+                nums[j],nums[j + 1] = nums[j + 1],nums[j]
+                j -= 1
+        return nums"""
+        nums.sort()
+        return nums
+#6对链表进行排序
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def insertionSortList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        dummyNode = ListNode()
+        dummyNode.next = head
+        sorted_last = head
+        curr = head.next
+        while curr:
+            pre = dummyNode
+            if curr.val >= sorted_last.val:
+                curr = curr.next
+                sorted_last = sorted_last.next
+                continue
+            while pre:
+                if pre.next.val <= curr.val:
+                    pre = pre.next
+                else:
+                    sorted_last.next = curr.next
+                    curr.next = pre.next
+                    pre.next = curr
+                    break
+            curr = sorted_last.next
+        return dummyNode.next
